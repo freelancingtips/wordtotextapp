@@ -1,49 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>WordToText</title>
-
-<link rel="stylesheet" href="styles.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word to Text App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #333;
+        }
+        #fileInput {
+            margin: 20px 0;
+        }
+        #output {
+            width: 90%;
+            max-width: 600px;
+            min-height: 200px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            white-space: pre-wrap;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
 </head>
-
 <body>
 
-<header class="header">
-<img src="assets/logo.png" class="logo">
-<h1>WordToText</h1>
-<p>Convert Word Documents to Clean Text</p>
-</header>
+    <h1>Word to Text Converter</h1>
 
-<main class="container">
+    <input type="file" id="fileInput" accept=".docx">
 
-<div id="dropArea">
+    <div id="output">Uploaded text will appear here...</div>
 
-<h2>Upload Word File</h2>
-<p>Drag & Drop .DOCX file</p>
+    <div class="footer">Powered by Mammoth.js</div>
 
-<input type="file" id="fileInput" accept=".docx">
+    <!-- Mammoth.js library -->
+    <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
 
-</div>
+    <script>
+        const fileInput = document.getElementById("fileInput");
+        const output = document.getElementById("output");
 
-<textarea id="output" placeholder="Your converted text will appear here..."></textarea>
+        fileInput.addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
 
-<div class="buttons">
-<button id="copyBtn">Copy</button>
-<button id="downloadBtn">Download TXT</button>
-</div>
-
-</main>
-
-<footer>
-<p>© 2026 WordToText</p>
-</footer>
-
-<script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
-<script src="app.js"></script>
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const arrayBuffer = reader.result;
+                mammoth.extractRawText({ arrayBuffer: arrayBuffer })
+                    .then(function(result) {
+                        output.textContent = result.value || "No text found in the document.";
+                    })
+                    .catch(function(err) {
+                        console.error(err);
+                        output.textContent = "Error reading the file.";
+                    });
+            };
+            reader.readAsArrayBuffer(file);
+        });
+    </script>
 
 </body>
 </html>
