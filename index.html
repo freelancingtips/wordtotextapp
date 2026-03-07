@@ -3,30 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Word to Text Converter</title>
+
+<title>WordToText</title>
+
 <link rel="stylesheet" href="styles.css">
+
 </head>
 
 <body>
 
-<div class="container">
+<header class="header">
+<img src="assets/logo.png" class="logo">
+<h1>WordToText</h1>
+<p>Convert Word Documents to Clean Text</p>
+</header>
 
-<h1>Word → Text</h1>
+<main class="container">
 
 <div id="dropArea">
-<p>Drag & Drop Word file</p>
-<p>or</p>
+
+<h2>Upload Word File</h2>
+<p>Drag & Drop .DOCX file</p>
+
 <input type="file" id="fileInput" accept=".docx">
+
 </div>
 
-<textarea id="output" placeholder="Converted text appears here"></textarea>
+<textarea id="output" placeholder="Your converted text will appear here..."></textarea>
 
 <div class="buttons">
 <button id="copyBtn">Copy</button>
 <button id="downloadBtn">Download TXT</button>
 </div>
 
-</div>
+</main>
+
+<footer>
+<p>© 2026 WordToText</p>
+</footer>
 
 <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
 <script src="app.js"></script>
