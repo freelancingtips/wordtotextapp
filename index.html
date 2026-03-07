@@ -1,1 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word to Text Converter</title>
+<link rel="stylesheet" href="styles.css">
+</head>
 
+<body>
+
+<div class="container">
+
+<h1>Word → Text</h1>
+
+<div id="dropArea">
+<p>Drag & Drop Word file</p>
+<p>or</p>
+<input type="file" id="fileInput" accept=".docx">
+</div>
+
+<textarea id="output" placeholder="Converted text appears here"></textarea>
+
+<div class="buttons">
+<button id="copyBtn">Copy</button>
+<button id="downloadBtn">Download TXT</button>
+</div>
+
+</div>
+
+<script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
