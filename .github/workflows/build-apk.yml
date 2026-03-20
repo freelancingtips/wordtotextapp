@@ -1,4 +1,4 @@
-name: Build Web to APK
+name: Build APK
 
 on:
   push:
@@ -9,18 +9,42 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      # This action packages your web files into an APK
-      - name: Convert to APK
-        uses: darkshredder/web-to-app-action@main
+      # 1. Checkout your own repository (contains your web files)
+      - name: Checkout your web app
+        uses: actions/checkout@v4
         with:
-          build-folder-path: "./"           # Folder where your index.html is
-          app-name: "WordToTextApp"         # Name of your app
-          output-folder-path: "my-apks"     # Where to store the APK
+          path: webapp
 
+      # 2. Checkout a minimal Android WebView template
+      - name: Checkout Android template
+        uses: actions/checkout@v4
+        with:
+          repository: Ayoubvvch/webtoapp-builder   # a ready‑made template
+          path: android-template
+
+      # 3. Copy your web files into the template's assets folder
+      - name: Copy web files
+        run: |
+          rm -rf android-template/app/src/main/assets/www/*
+          cp -r webapp/* android-template/app/src/main/assets/www/
+
+      # 4. Set up Java (required for Android build)
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # 5. Make gradlew executable and build the APK
+      - name: Build APK
+        run: |
+          cd android-template
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      # 6. Upload the APK as an artifact
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: my-android-app
-          path: my-apks/
+          name: app-debug
+          path: android-template/app/build/outputs/apk/debug/*.apk
